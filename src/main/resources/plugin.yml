@@ -1,0 +1,7 @@
+name: LoginSender
+version: ${project.version}
+main: me.deadlight.loginsender.LoginSender
+api-version: 1.13
+depend: [ AuthMe ]
+authors: [ Dead_Light ]
+description: sending you to the main server after authentication in authme
