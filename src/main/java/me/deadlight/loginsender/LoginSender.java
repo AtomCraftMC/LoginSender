@@ -1,5 +1,6 @@
 package me.deadlight.loginsender;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -12,10 +13,13 @@ public final class LoginSender extends JavaPlugin {
     }
     public static JedisPool pool;
     public static Jedis rJedis;
+    public static FileConfiguration config;
+
 
     @Override
     public void onEnable() {
         plugin = this;
+        config = getConfig();
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         pool = new JedisPool("127.0.0.1", 6379);
         getServer().getPluginManager().registerEvents(new LoginListener(), this);

@@ -9,6 +9,10 @@ import redis.clients.jedis.Jedis;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class LoginListener implements Listener {
 
@@ -21,32 +25,25 @@ public class LoginListener implements Listener {
 
     public static String calculateTheRightBedwarsLobby(Jedis jedis) {
 
-        String result1 = jedis.get("count-blobby1");
-        String result2 = jedis.get("count-blobby2");
-
-        if (result1 != null || result2 != null) {
-
-            if (result1 == null) {
-                return "blobby2";
+        List<String> lobbyServers = LoginSender.config.getStringList("servers");
+        List<ServerObject> servers = new ArrayList<>();
+        for (String server : lobbyServers) {
+            if (jedis.get("count-" + server) == null) {
+                continue;
             }
-            if (result2 == null) {
-                return "blobby1";
-            }
-            int count1 = Integer.parseInt(result1);
-            int count2 = Integer.parseInt(result2);
-            if (count1 == count2) {
-                return "blobby1";
-            }
+            int count = Integer.parseInt(jedis.get("count-" + server));
+            ServerObject object = new ServerObject(server, count);
+            servers.add(object);
+        }
+        Collections.sort(servers);
+        Collections.reverse(servers);
 
-            if (count1 > count2) {
-                return "blobby2";
-            } else {
-                return "blobby1";
-            }
-
-        } else {
+        if (servers.size() == 0) {
             return "auth";
         }
+
+        return servers.get(0).name;
+
 
     }
 
