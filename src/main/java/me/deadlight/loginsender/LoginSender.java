@@ -21,6 +21,7 @@ public final class LoginSender extends JavaPlugin {
     @Override
     public void onEnable() {
         plugin = this;
+        saveDefaultConfig();
         config = getConfig();
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         pool = new JedisPool("127.0.0.1", 6379);
