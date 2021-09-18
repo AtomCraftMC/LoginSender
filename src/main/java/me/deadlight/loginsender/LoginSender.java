@@ -44,7 +44,6 @@ public final class LoginSender extends JavaPlugin {
             }
 
             j.set("lobbylist", finalList.toString());
-            j.expire("lobbylist", 5);
         } finally {
             // Be sure to close it! It can and will cause memory leaks.
             j.close();
