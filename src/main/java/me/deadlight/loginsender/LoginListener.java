@@ -36,7 +36,6 @@ public class LoginListener implements Listener {
             servers.add(object);
         }
         Collections.sort(servers);
-        Collections.reverse(servers);
 
         if (servers.size() == 0) {
             return "auth";
