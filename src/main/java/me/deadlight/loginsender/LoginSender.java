@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.List;
+
 public final class LoginSender extends JavaPlugin {
 
     private static LoginSender plugin;
@@ -29,6 +31,20 @@ public final class LoginSender extends JavaPlugin {
             // If you want to use a password, use
             j.auth("piazcraftmc");
             rJedis = j;
+            List<String> servers = config.getStringList("servers");
+            StringBuilder finalList = new StringBuilder();
+            boolean started = false;
+            for (String server : servers) {
+                if (!started) {
+                    started = true;
+                    finalList = new StringBuilder(server);
+                } else {
+                    finalList.append(":").append(server);
+                }
+            }
+
+            j.set("lobbylist", finalList.toString());
+            j.expire("lobbylist", 5);
         } finally {
             // Be sure to close it! It can and will cause memory leaks.
             j.close();
