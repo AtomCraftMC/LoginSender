@@ -5,3 +5,8 @@ api-version: 1.13
 depend: [ AuthMe ]
 authors: [ Dead_Light ]
 description: sending you to the main server after authentication in authme
+commands:
+  blockednumber:
+    description: see
+  whitelisted:
+    description: check
