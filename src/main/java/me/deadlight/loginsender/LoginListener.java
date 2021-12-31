@@ -1,6 +1,8 @@
 package me.deadlight.loginsender;
 
 import fr.xephi.authme.events.LoginEvent;
+import ir.alijk.pedarshenas.PedarShenasSpigot;
+import ir.alijk.pedarshenas.database.models.AtomPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -27,11 +29,14 @@ public class LoginListener implements Listener {
 
 
         if (LoginSender.verifiedPlayers.contains(event.getPlayer().getName())) {
-            String server = calculateTheRightBedwarsLobby(LoginSender.rJedis);
+            String randomLobby = calculateTheRightBedwarsLobby(LoginSender.rJedis);
             Bukkit.getScheduler().runTaskLater(LoginSender.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    sendPlayerToServer(event.getPlayer(), server);
+                    // check if user is verified
+                    AtomPlayer atomPlayer = PedarShenasSpigot.getAtomPlayers().get(event.getPlayer());
+                    if (atomPlayer.isVerified()) sendPlayerToServer(event.getPlayer(), randomLobby);
+                    else sendPlayerToServer(event.getPlayer(), "verify");
                 }
             }, 30);
             return;
@@ -45,17 +50,18 @@ public class LoginListener implements Listener {
                 LoginSender.playerCheck.put(player.getUniqueId(), 0);
             }
         }, 0);
-        //sendPlayerToServer(event.getPlayer(), server);
     }
 
     @EventHandler
     public void onResourceRespond(PlayerResourcePackStatusEvent event) {
         if (event.getStatus().equals(PlayerResourcePackStatusEvent.Status.FAILED_DOWNLOAD) || event.getStatus().equals(PlayerResourcePackStatusEvent.Status.SUCCESSFULLY_LOADED)) {
-            String server = calculateTheRightBedwarsLobby(LoginSender.rJedis);
+            String randomLobby = calculateTheRightBedwarsLobby(LoginSender.rJedis);
             Bukkit.getScheduler().runTaskLater(LoginSender.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    sendPlayerToServer(event.getPlayer(), server);
+                    AtomPlayer atomPlayer = PedarShenasSpigot.getAtomPlayers().get(event.getPlayer());
+                    if (atomPlayer.isVerified()) sendPlayerToServer(event.getPlayer(), randomLobby);
+                    else sendPlayerToServer(event.getPlayer(), "verify");
                 }
             }, 20);
             return;
@@ -70,11 +76,13 @@ public class LoginListener implements Listener {
             if (event.getPlayer().getName().equalsIgnoreCase("dead_light")) {
                 event.getPlayer().sendMessage("yes you declined");
             }
-            String server = calculateTheRightBedwarsLobby(LoginSender.rJedis);
+            String randomLobby = calculateTheRightBedwarsLobby(LoginSender.rJedis);
             Bukkit.getScheduler().runTaskLater(LoginSender.getInstance(), new Runnable() {
                 @Override
                 public void run() {
-                    sendPlayerToServer(event.getPlayer(), server);
+                    AtomPlayer atomPlayer = PedarShenasSpigot.getAtomPlayers().get(event.getPlayer());
+                    if (atomPlayer.isVerified()) sendPlayerToServer(event.getPlayer(), randomLobby);
+                    else sendPlayerToServer(event.getPlayer(), "verify");
                 }
             }, 30);
         }
