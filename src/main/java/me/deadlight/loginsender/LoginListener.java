@@ -2,7 +2,8 @@ package me.deadlight.loginsender;
 
 import fr.xephi.authme.events.LoginEvent;
 import ir.alijk.pedarshenas.PedarShenasSpigot;
-import ir.alijk.pedarshenas.database.models.AtomPlayer;
+
+import ir.alijk.pedarshenas.data.AtomPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
